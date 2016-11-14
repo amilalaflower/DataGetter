@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+ xmlns:context="http://www.springframework.org/schema/context"
+ xmlns:mvc="http://www.springframework.org/schema/mvc"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:p="http://www.springframework.org/schema/p"
+ xmlns:tx="http://www.springframework.org/schema/tx"
+ xmlns:task="http://www.springframework.org/schema/task"
+ xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-4.2.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx-4.2.xsd">
+
+    <!-- データソース -->
+    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver" />
+        <property name="url" value="jdbc:mysql://192.168.1.17:3307/DataGetter" />
+        <property name="username" value="iku" />
+        <property name="password" value="iku" />
+    </bean>
+    <bean id="dataSourceTo" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="com.microsoft.sqlserver.jdbc.SQLServerDriver" />
+        <property name="url" value="jdbc:sqlserver://192.168.1.10:1433;DatabaseName=PachinkoSlot" />
+        <property name="username" value="iku" />
+        <property name="password" value="@milala19" />
+    </bean>
+
+    <!-- ビジネスクラス -->
+    <bean id="DataGetter" class="amilalaflower.business.DataGetterBusiness">
+    </bean>
+    <bean id="ToSQLServer" class="amilalaflower.business.ToSQLServerBusiness">
+    </bean>
+
+    <context:annotation-config />
+    <context:component-scan base-package="amilalaflower.common,amilalaflower.mbg.mapper"/>
+
+    <!-- SqlSessionFactoryの設定 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean" >
+       <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="sqlSessionFactoryTo" class="org.mybatis.spring.SqlSessionFactoryBean" >
+       <property name="dataSource" ref="dataSourceTo"/>
+    </bean>
+
+    <!-- Mapper -->
+    <bean id="TMachineDataMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+      <property name="mapperInterface" value="amilalaflower.mbg.mapper.TMachineDataMapper" />
+      <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <bean id="MMachineListMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+      <property name="mapperInterface" value="amilalaflower.mbg.mapper.MMachineListMapper" />
+      <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+    </bean>
+    <bean id="WMachineDataMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+      <property name="mapperInterface" value="amilalaflower.mbg.mapper.WMachineDataMapper" />
+      <property name="sqlSessionFactory" ref="sqlSessionFactoryTo" />
+    </bean>
+
+    </beans>
