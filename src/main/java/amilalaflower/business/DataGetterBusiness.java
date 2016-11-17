@@ -102,16 +102,15 @@ public class DataGetterBusiness {
         sleeptime = Integer.parseInt(prop.getSleeptime());
 
         try{
-            // 必須ディレクトリ作成処理呼び出し処理
             createDir(slotDir);
             createDir(pachiDir);
 
-            // 日付取得(フォーマット:yyyy-mm-dd)
             Calendar cal = Calendar.getInstance();
+            //cal.add(Calendar.DAY_OF_MONTH, -2);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date strDate = sdf.parse(sdf.format(cal.getTime()));
 
-            //日付のセット
+
             md.setDate(strDate);
 
             // 台リスト取得
@@ -132,7 +131,6 @@ public class DataGetterBusiness {
                 getMachineData(number);
             }
 
-            // 総計をログに出力
             log.info("トータル差枚:{}  トータルゲーム数:{}", totalSamai, totalGames);
 
         } catch (DataGetterException e) {
@@ -147,7 +145,7 @@ public class DataGetterBusiness {
      * 差枚計算
      * @throws Exception 例外
      */
-    private void getMachineData(final String number) throws Exception {
+    private void getMachineData(final String number) {
         try {
             log.debug("MachineNumber:{}", number);
             StringBuilder buf = new StringBuilder();
@@ -207,7 +205,7 @@ public class DataGetterBusiness {
 
             Thread.sleep(sleeptime);
         } catch (Exception e) {
-            throw e;
+            log.error("台データ取得失敗  ★台番号:{}", number, e);
         }
     }
 

@@ -111,6 +111,7 @@ public class HtmlParser {
                 }
             }
             //tbody[1]/tr[日付でずれます]/td[" + i + "]/text()
+            //Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[1]/td[" + i + "]/text()");
             Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[1]/td[" + i + "]/text()");
 
             if (info_nodes.length > 0) {

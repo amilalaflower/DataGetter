@@ -21,12 +21,17 @@ public class DGConst {
     public final static String HOME = "/DataGetter/";
 
     /**
-     * 取得対象日
+     * 取得対象日(当日)
      */
     public final static String TODAY = "当日";
 
     /**
-     * 取得対象日
+     * 取得対象日(1日前)
+     */
+    public final static String ONE_DAYS = "1日前";
+
+    /**
+     * 取得対象日(2日前))
      */
     public final static String TWO_DAYS = "2日前";
 
