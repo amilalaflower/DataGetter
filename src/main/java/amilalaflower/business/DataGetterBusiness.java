@@ -284,6 +284,7 @@ public class DataGetterBusiness {
 
         BufferedImage readGraph = null;
         int samai = 0;
+        int color = 0;
 
         // プロパティファイル値取得
         // 高さチェック値
@@ -296,7 +297,6 @@ public class DataGetterBusiness {
         int targetColor = Integer.parseInt(prop.getGraph_color());
 
         try{
-            int color = 0;
 
             File graphPic = new File(graphPicPath);
             readGraph = ImageIO.read(graphPic);

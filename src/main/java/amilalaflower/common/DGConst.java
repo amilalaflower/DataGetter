@@ -6,12 +6,17 @@ public class DGConst {
     }
 
     /**
-     * バッチ名：データゲッター
+     * バッチ名：データゲッタ
      */
     public final static String DATAGETTER =  "DataGetter";
 
     /**
-     * バッチ名：データAWS連携
+     * バッチ名：データゲッタユーザ
+     */
+    public final static String DATAGETTERUSER = "DataGetterUser";
+
+    /**
+     * バッチ名：SQLSERVER連携
      */
     public final static String TOSQLSERVER =  "ToSQLServer";
 
@@ -54,4 +59,9 @@ public class DGConst {
      * 文字コード：UTF-8
      */
     public final static String ENC_UTF_8 = "UTF-8";
+
+    /**
+     * リストファイル名
+     */
+    public final static String LIST = "/DataGetter/List/ALL.csv";
 }

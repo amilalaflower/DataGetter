@@ -35,6 +35,8 @@
     </bean>
     <bean id="ToSQLServer" class="amilalaflower.business.ToSQLServerBusiness">
     </bean>
+    <bean id="DataGetterUser" class="amilalaflower.business.DataGetterUserBusiness">
+    </bean>
 
     <context:annotation-config />
     <context:component-scan base-package="amilalaflower.common,amilalaflower.mbg.mapper"/>
