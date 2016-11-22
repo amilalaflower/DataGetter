@@ -128,7 +128,16 @@ public class DataGetterBusiness {
                 .collect(Collectors.toList());
 
             for (final String number : numberList) {
-                getMachineData(number);
+                int cnt = 0;
+                while (cnt < 3) {
+                    try {
+                        getMachineData(number);
+                        break;
+                    } catch (Exception e) {
+                        cnt++;
+                        Thread.sleep(sleeptime);
+                    }
+                }
             }
 
             log.info("トータル差枚:{}  トータルゲーム数:{}", totalSamai, totalGames);
@@ -143,9 +152,10 @@ public class DataGetterBusiness {
 
     /**
      * 差枚計算
+     * @param number 台番号
      * @throws Exception 例外
      */
-    private void getMachineData(final String number) {
+    private void getMachineData(final String number) throws Exception {
         try {
             log.debug("MachineNumber:{}", number);
             StringBuilder buf = new StringBuilder();
@@ -206,6 +216,7 @@ public class DataGetterBusiness {
             Thread.sleep(sleeptime);
         } catch (Exception e) {
             log.error("台データ取得失敗  ★台番号:{}", number, e);
+            throw e;
         }
     }
 

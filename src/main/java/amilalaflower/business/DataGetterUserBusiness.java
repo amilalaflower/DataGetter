@@ -96,7 +96,16 @@ public class DataGetterUserBusiness {
                 .collect(Collectors.toList());
 
             for (final String number : numberList) {
-                getMachineData(number);
+                int cnt = 0;
+                while (cnt < 3) {
+                    try {
+                        getMachineData(number);
+                        break;
+                    } catch (Exception e) {
+                        cnt++;
+                        Thread.sleep(sleeptime);
+                    }
+                }
             }
 
             log.info("トータル差枚:{}  トータルゲーム数:{}", totalSamai, totalGames);
@@ -189,9 +198,10 @@ public class DataGetterUserBusiness {
 
     /**
      * 差枚計算
+     * @param number 台番号
      * @throws Exception 例外
      */
-    private void getMachineData(final String number) {
+    private void getMachineData(final String number) throws Exception {
         try {
             log.debug("MachineNumber:{}", number);
             StringBuilder buf = new StringBuilder();
@@ -230,12 +240,13 @@ public class DataGetterUserBusiness {
             Thread.sleep(sleeptime);
         } catch (Exception e) {
             log.error("台データ取得失敗  ★台番号:{}", number, e);
+            throw e;
         }
     }
 
     /**
      * グラフ画像を読み取り座標を取得
-     * @param graphPicPath スランプグラフファイルパス
+     * @param imageBin スランプグラフイメージ
      * @throws DataGetterException 例外
      * @return samai 差枚
      */
@@ -255,7 +266,7 @@ public class DataGetterUserBusiness {
         // ターゲット色
         int targetColor = Integer.parseInt(prop.getGraph_color());
 
-        try{
+        try {
 
             graphImage = ImageIO.read(new ByteArrayInputStream(imageBin));
 
