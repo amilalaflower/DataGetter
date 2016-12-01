@@ -31,7 +31,7 @@ public class HtmlParser {
             Object[] label_node = root.evaluateXPath("//*[@id='tab-graph-some']/table/tbody/tr/td/p/text()");
 
             for (;;) {
-                if (label_node[i].toString().equals(DGConst.TODAY)){
+                if (label_node[i].toString().equals(DGConst.ONE_DAYS)){
                     i++;
                     break;
                 } else if (label_node.length < i) {
@@ -112,7 +112,7 @@ public class HtmlParser {
             }
             //tbody[1]/tr[日付でずれます]/td[" + i + "]/text()
             //Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[1]/td[" + i + "]/text()");
-            Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[1]/td[" + i + "]/text()");
+            Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[2]/td[" + i + "]/text()");
 
             if (info_nodes.length > 0) {
                 games = Integer.parseInt(info_nodes[0].toString().replace(",",""));

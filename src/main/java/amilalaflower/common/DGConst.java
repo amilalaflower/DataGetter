@@ -63,5 +63,10 @@ public class DGConst {
     /**
      * リストファイル名
      */
-    public final static String LIST = "/DataGetter/List/ALL.csv";
+    public final static String LIST = "./List/ALL.csv";
+
+    /**
+     *
+     */
+    public final static String REGEX_HTTP = "^http://|^https://";
 }

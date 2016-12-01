@@ -11,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -28,7 +30,6 @@ import amilalaflower.common.HtmlParser;
 import amilalaflower.common.MachineData;
 import amilalaflower.common.Property;
 import amilalaflower.mbg.entity.MMachineList;
-import amilalaflower.mbg.entity.MMachineListExample;
 import amilalaflower.mbg.entity.TMachineData;
 import amilalaflower.mbg.mapper.MMachineListMapper;
 import amilalaflower.mbg.mapper.TMachineDataMapper;
@@ -83,8 +84,12 @@ public class DataGetterBusiness {
      // スリープ時間
      private int sleeptime;
 
+     private int tryLimit;
+
     /**
-     * メイン処理実行
+     * 台データ登録処理<br>
+     * 取得対象台番号リストを取得して１台ずつデータを登録する
+     * @param args バッチ引数1 [ホールID]
      * @throws Exception 例外
      */
     public void execute(final String[]args) throws Exception {
@@ -100,27 +105,21 @@ public class DataGetterBusiness {
         slotDir = prop.getSlot_dir();
         pachiDir = prop.getPachi_dir();
         sleeptime = Integer.parseInt(prop.getSleeptime());
+        tryLimit = Integer.parseInt(prop.getTryLimit());
 
         try{
             createDir(slotDir);
             createDir(pachiDir);
 
             Calendar cal = Calendar.getInstance();
-            //cal.add(Calendar.DAY_OF_MONTH, -2);
+            cal.add(Calendar.DAY_OF_MONTH, -1);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date strDate = sdf.parse(sdf.format(cal.getTime()));
 
-
             md.setDate(strDate);
 
-            // 台リスト取得
-            MMachineListExample where = new MMachineListExample();
-            where.createCriteria()
-                .andHallIdEqualTo(hallId);
-            where.setOrderByClause("MACHINE_ID");
-            List<MMachineList> machineList = mlmapper.selectByExample(where);
+            List<MMachineList> machineList = mlmapper.selectTargetMachine(hallId, md.getDate());
 
-            // 台データ登録処理
             List<String> numberList = machineList.stream()
                 .sequential()
                 .map(MMachineList::getMachineId)
@@ -129,7 +128,7 @@ public class DataGetterBusiness {
 
             for (final String number : numberList) {
                 int cnt = 0;
-                while (cnt < 3) {
+                while (cnt < tryLimit) {
                     try {
                         getMachineData(number);
                         break;
@@ -191,11 +190,10 @@ public class DataGetterBusiness {
             download(machineUrl, machineHtml);
 
             cleaner = new HtmlCleaner();
-
-            // HTMLノード取得
             TagNode node = cleaner.clean(new File(machineHtml), DGConst.ENC_UTF_8);
             htmlparse = new HtmlParser(node);
             graphUrl = htmlparse.getGraph(number);
+            graphUrl = fixUrl(graphUrl);
 
             // グラフ画像ダウンロード処理
             download(graphUrl, machineGraphPath);
@@ -383,5 +381,26 @@ public class DataGetterBusiness {
             log.error("台データ登録失敗 -台データ取得日:{} -台番号:{}", md.getDate(), md.getMachineNo(), e);
             throw new DataGetterException();
         }
+    }
+
+    /**
+     * グラフURL形式修正処理
+     * @param url グラフURL
+     * @return fixedUrl 修正済みURL
+     */
+    private String fixUrl(final String url) {
+        String fixedUrl = null;
+        String baseUrl = prop.getUrl();
+        String regex = DGConst.REGEX_HTTP;
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(url);
+
+        if (m.find()){
+            fixedUrl = url;
+        }else{
+            fixedUrl = baseUrl + url;
+        }
+
+        return fixedUrl;
     }
 }

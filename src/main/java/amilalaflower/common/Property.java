@@ -19,6 +19,9 @@ public class Property {
     @Value("${datagetter.pachi_dir}")
     private String pachi_dir;
 
+    @Value("${datagetter.url}")
+    private String url;
+
     @Value("${datagetter.hall_url}")
     private String hall_url;
 
@@ -43,6 +46,9 @@ public class Property {
     @Value("${datagetter.sleeptime}")
     private String sleeptime;
 
+    @Value("${datagetter.try_limit}")
+    private String tryLimit;
+
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
@@ -58,6 +64,10 @@ public class Property {
 
     public String getPachi_dir() {
         return pachi_dir;
+    }
+
+    public String getUrl() {
+        return url;
     }
 
     public String getHall_url() {
@@ -90,5 +100,9 @@ public class Property {
 
     public String getSleeptime() {
         return sleeptime;
+    }
+
+    public String getTryLimit() {
+        return tryLimit;
     }
 }

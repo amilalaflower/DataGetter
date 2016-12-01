@@ -16,6 +16,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.imageio.ImageIO;
@@ -108,6 +110,7 @@ public class DataGetterUserBusiness {
                 }
             }
 
+            System.out.println("トータル差枚:" + totalSamai + "  トータルゲーム数:" + totalGames);
             log.info("トータル差枚:{}  トータルゲーム数:{}", totalSamai, totalGames);
 
         } catch (Exception e) {
@@ -217,11 +220,10 @@ public class DataGetterUserBusiness {
             buf.setLength(0);
 
             cleaner = new HtmlCleaner();
-
-            // HTMLノード取得
             TagNode node = cleaner.clean(new URL(machineUrl));
             htmlparse = new HtmlParser(node);
             graphUrl = htmlparse.getGraph(number);
+            graphUrl = fixUrl(graphUrl);
 
             // グラフ画像ダウンロード処理
             imageBin = download(graphUrl);
@@ -230,6 +232,8 @@ public class DataGetterUserBusiness {
             md.setMachineName(htmlparse.getName(number));
             md.setSamai(readGraph(imageBin));
             md.setGames(htmlparse.getGames(number));
+
+            System.out.println("台番号:" + md.getMachineNo() + " 機種名:" + md.getMachineName() + " ゲーム数:" + md.getGames() + " 差枚:" + md.getSamai());
 
             log.info("台番号:{} 機種名:{} ゲーム数:{} 差枚:{}",
                     md.getMachineNo(), md.getMachineName(), md.getGames(), md.getSamai());
@@ -320,5 +324,26 @@ public class DataGetterUserBusiness {
         samai = -samai;
         log.debug("PayOut:{}", samai);
         return samai;
+    }
+
+    /**
+     * グラフURL形式修正処理
+     * @param url グラフURL
+     * @return fixedUrl 修正済みURL
+     */
+    private String fixUrl(final String url) {
+        String fixedUrl = null;
+        String baseUrl = prop.getUrl();
+        String regex = DGConst.REGEX_HTTP;
+        Pattern p = Pattern.compile(regex);
+        Matcher m = p.matcher(url);
+
+        if (m.find()){
+            fixedUrl = url;
+        }else{
+            fixedUrl = baseUrl + url;
+        }
+
+        return fixedUrl;
     }
 }
