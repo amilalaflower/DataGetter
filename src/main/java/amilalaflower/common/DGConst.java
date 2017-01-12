@@ -36,9 +36,64 @@ public class DGConst {
     public final static String ONE_DAYS = "1日前";
 
     /**
-     * 取得対象日(2日前))
+     * 取得対象日(2日前)
      */
     public final static String TWO_DAYS = "2日前";
+
+    /**
+     * 取得対象日(3日前)
+     */
+    public final static String THREE_DAYS = "3日前";
+    
+    /**
+     * 取得対象日(4日前)
+     */
+    public final static String FOUR_DAYS = "4日前";
+    
+    /**
+     * 取得対象日(5日前)
+     */
+    public final static String FIVE_DAYS = "5日前";
+    
+    /**
+     * 取得対象日(6日前)
+     */
+    public final static String SIX_DAYS = "6日前";
+    
+    /**
+     * 取得対象日(7日前)
+     */
+    public final static String SEVEN_DAYS = "7日前";
+    
+    /**
+     * 取得対象日(8日前)
+     */
+    public final static String EIGHT_DAYS = "8日前";
+    
+    /**
+     * 取得対象日(9日前)
+     */
+    public final static String NINE_DAYS = "9日前";
+
+    /**
+     * 取得対象日(10日前)
+     */
+    public final static String TEN_DAYS = "10日前";
+    
+    /**
+     * 取得対象日(11日前)
+     */
+    public final static String ELEVEN_DAYS = "11日前";
+    
+    /**
+     * 取得対象日(12日前)
+     */
+    public final static String TWELVE_DAYS = "12日前";
+    
+    /**
+     * 取得対象日(13日前)
+     */
+    public final static String THIRTEEN_DAYS = "13日前";
 
     /**
      * 取得カラム名
@@ -66,7 +121,7 @@ public class DGConst {
     public final static String LIST = "./List/ALL.csv";
 
     /**
-     *
+     * HTTP/HTTPS
      */
     public final static String REGEX_HTTP = "^http://|^https://";
 }

@@ -64,6 +64,11 @@ public class DataGetterBusiness {
       * ホールID
       */
      private String hallId;
+     
+     /**
+      * 取得対象日
+      */
+     private int ago;
 
      /**
       * トータル差枚
@@ -83,24 +88,23 @@ public class DataGetterBusiness {
      private String pachiDir;
      // スリープ時間
      private int sleeptime;
-
+     // トライ上限
      private int tryLimit;
 
     /**
      * 台データ登録処理<br>
      * 取得対象台番号リストを取得して１台ずつデータを登録する
-     * @param args バッチ引数1 [ホールID]
+     * @param args バッチ引数
      * @throws Exception 例外
      */
     public void execute(final String[]args) throws Exception {
-        // 変数初期化
+    	
         totalGames = 0;
         totalSamai = 0;
-
-        // ホールID
+        
         hallId = args[0];
-
-        // 設定値取得
+        ago = Integer.parseInt(args[1]);
+        
         hallurl = prop.getHall_url();
         slotDir = prop.getSlot_dir();
         pachiDir = prop.getPachi_dir();
@@ -112,7 +116,7 @@ public class DataGetterBusiness {
             createDir(pachiDir);
 
             Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DAY_OF_MONTH, -1);
+            cal.add(Calendar.DAY_OF_MONTH, -ago);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Date strDate = sdf.parse(sdf.format(cal.getTime()));
 
@@ -120,24 +124,26 @@ public class DataGetterBusiness {
 
             List<MMachineList> machineList = mlmapper.selectTargetMachine(hallId, md.getDate());
 
-            List<String> numberList = machineList.stream()
+            machineList.stream()
                 .sequential()
                 .map(MMachineList::getMachineId)
                 .map(Object::toString)
-                .collect(Collectors.toList());
-
-            for (final String number : numberList) {
-                int cnt = 0;
-                while (cnt < tryLimit) {
-                    try {
-                        getMachineData(number);
-                        break;
-                    } catch (Exception e) {
-                        cnt++;
-                        Thread.sleep(sleeptime);
+                .collect(Collectors.toList())
+                .forEach(num -> {
+                    int cnt = 0;
+                    while (cnt < tryLimit) {
+                        try {
+                            getMachineData(num);
+                            break;
+                        } catch (Exception e) {
+                            cnt++;
+                            try {
+								Thread.sleep(sleeptime);
+							} catch (InterruptedException e1) {
+							}
+                        }
                     }
-                }
-            }
+                });
 
             log.info("トータル差枚:{}  トータルゲーム数:{}", totalSamai, totalGames);
 
@@ -192,7 +198,7 @@ public class DataGetterBusiness {
             cleaner = new HtmlCleaner();
             TagNode node = cleaner.clean(new File(machineHtml), DGConst.ENC_UTF_8);
             htmlparse = new HtmlParser(node);
-            graphUrl = htmlparse.getGraph(number);
+            graphUrl = htmlparse.getGraph(number, ago);
             graphUrl = fixUrl(graphUrl);
 
             // グラフ画像ダウンロード処理
@@ -201,7 +207,7 @@ public class DataGetterBusiness {
             md.setMachineNo(number);
             md.setMachineName(htmlparse.getName(number));
             md.setSamai(readGraph(machineGraphPath));
-            md.setGames(htmlparse.getGames(number));
+            md.setGames(htmlparse.getGames(number, ago));
 
             log.info("台番号:{} 機種名:{} ゲーム数:{} 差枚:{}",
                     md.getMachineNo(), md.getMachineName(), md.getGames(), md.getSamai());

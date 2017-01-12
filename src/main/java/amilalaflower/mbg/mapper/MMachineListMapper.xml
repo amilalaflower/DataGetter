@@ -119,7 +119,7 @@
     where HALL_ID = #{hallId,jdbcType=VARCHAR}
       and MACHINE_ID = #{machineId,jdbcType=INTEGER}
   </select>
-  <select id="selectTargetMachine" resultMap="BaseResultMap" parameterType="amilalaflower.mbg.entity.SelectTargetMachineEntity" >
+  <select id="selectTargetMachine" resultMap="BaseResultMap" parameterType="amilalaflower.mbg.entity.MMachineListKey" >
 select
     LIST.MACHINE_ID
 from

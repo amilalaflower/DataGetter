@@ -222,7 +222,7 @@ public class DataGetterUserBusiness {
             cleaner = new HtmlCleaner();
             TagNode node = cleaner.clean(new URL(machineUrl));
             htmlparse = new HtmlParser(node);
-            graphUrl = htmlparse.getGraph(number);
+            graphUrl = htmlparse.getGraph(number, 0);
             graphUrl = fixUrl(graphUrl);
 
             // グラフ画像ダウンロード処理
@@ -231,7 +231,7 @@ public class DataGetterUserBusiness {
             md.setMachineNo(number);
             md.setMachineName(htmlparse.getName(number));
             md.setSamai(readGraph(imageBin));
-            md.setGames(htmlparse.getGames(number));
+            md.setGames(htmlparse.getGames(number, 0));
 
             System.out.println("台番号:" + md.getMachineNo() + " 機種名:" + md.getMachineName() + " ゲーム数:" + md.getGames() + " 差枚:" + md.getSamai());
 

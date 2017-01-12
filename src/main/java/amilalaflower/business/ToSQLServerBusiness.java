@@ -48,7 +48,7 @@ public class ToSQLServerBusiness {
         hallId = args[0];
 
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -2);
+        c.add(Calendar.DATE, -3);
 
         TMachineDataExample where = new TMachineDataExample();
         where.createCriteria()

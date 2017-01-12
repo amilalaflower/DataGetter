@@ -23,7 +23,7 @@ public class HtmlParser {
      * @return return グラフURL
      * @throws DataGetterException 例外
      */
-    public String getGraph(final String number) throws DataGetterException{
+    public String getGraph(final String number, final int ago) throws DataGetterException{
         String URL = null;
         int i = 0;
         try{
@@ -31,7 +31,7 @@ public class HtmlParser {
             Object[] label_node = root.evaluateXPath("//*[@id='tab-graph-some']/table/tbody/tr/td/p/text()");
 
             for (;;) {
-                if (label_node[i].toString().equals(DGConst.ONE_DAYS)){
+                if (label_node[i].toString().equals(getDate(ago))){
                     i++;
                     break;
                 } else if (label_node.length < i) {
@@ -91,7 +91,7 @@ public class HtmlParser {
      * @return games 総スタート
      * @throws DataGetterException
      */
-    public int getGames(final String number) throws DataGetterException{
+    public int getGames(final String number, final int ago) throws DataGetterException{
 
         int games = 0;
         int i = 0;
@@ -112,7 +112,7 @@ public class HtmlParser {
             }
             //tbody[1]/tr[日付でずれます]/td[" + i + "]/text()
             //Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[1]/td[" + i + "]/text()");
-            Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[2]/td[" + i + "]/text()");
+            Object[] info_nodes = root.evaluateXPath("//tbody[1]/tr[" + (1 + ago) + "]/td[" + i + "]/text()");
 
             if (info_nodes.length > 0) {
                 games = Integer.parseInt(info_nodes[0].toString().replace(",",""));
@@ -129,5 +129,47 @@ public class HtmlParser {
             throw new DataGetterException();
         }
         return games;
+    }
+    
+    /**
+     * 日付名取得
+     * @param ago 日前
+     * @return 対象日付名
+     */
+    private String getDate(int ago) {
+    	
+    	String date = null;
+    	
+    	if (ago == 0) {
+    		date = DGConst.TODAY;
+    	} else if (ago == 1) {
+    		date = DGConst.ONE_DAYS;
+    	} else if (ago == 2) {
+    		date = DGConst.TWO_DAYS;
+    	} else if (ago == 3) {
+    		date = DGConst.THREE_DAYS;
+    	} else if (ago == 4) {
+    		date = DGConst.FOUR_DAYS;
+    	} else if (ago == 5) {
+    		date = DGConst.FIVE_DAYS;
+    	} else if (ago == 6) {
+    		date = DGConst.SIX_DAYS;
+    	} else if (ago == 7) {
+    		date = DGConst.SEVEN_DAYS;
+    	} else if (ago == 8) {
+    		date = DGConst.EIGHT_DAYS;
+    	} else if (ago == 9) {
+    		date = DGConst.NINE_DAYS;
+    	} else if (ago == 10) {
+    		date = DGConst.TEN_DAYS;
+    	} else if (ago == 11) {
+    		date = DGConst.ELEVEN_DAYS;
+    	} else if (ago == 12) {
+    		date = DGConst.TWELVE_DAYS;
+    	} else if (ago == 13) {
+    		date = DGConst.THIRTEEN_DAYS;
+    	}
+    	
+    	return date;
     }
 }
