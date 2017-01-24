@@ -61,9 +61,10 @@ public class DataGetter extends Base {
                 throw new InvalidParameterException("ホールIDが設定されていません");
             }
             // ターゲット日
-//            if(args[1] == null) {
-//            	throw new InvalidParameterException("ターゲット日が設定されていません");
-//            }
+            if(args[1] == null) {
+            	throw new InvalidParameterException("ターゲット日が設定されていません");
+            }
+            
         } catch (InvalidParameterException e) {
             throw e;
         }
