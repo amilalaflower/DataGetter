@@ -210,7 +210,11 @@ public class DataGetterBusiness {
             md.setGames(htmlparse.getGames(number, ago));
 
             log.info("台番号:{} 機種名:{} ゲーム数:{} 差枚:{}",
-                    md.getMachineNo(), md.getMachineName(), md.getGames(), md.getSamai());
+                md.getMachineNo()
+                , md.getMachineName()
+                , md.getGames()
+                , md.getSamai()
+            );
 
             insertMachineData(md);
 
