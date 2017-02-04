@@ -1,8 +1,3 @@
-/**
- * DataGetter
- * @author amilalaflower
- * @version 1.0
- */
 package amilalaflower.app;
 
 import java.security.InvalidParameterException;
@@ -13,7 +8,11 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 import amilalaflower.business.DataGetterBusiness;
 import amilalaflower.common.DGConst;
 
-
+/**
+ * DataGetter
+ * @author amilalaflower
+ * @version 1.0
+ */
 public class DataGetter extends Base {
 
     /*
@@ -26,7 +25,7 @@ public class DataGetter extends Base {
      */
     DataGetter() {
         super();
-        super.COMMAND_NAME = DGConst.DATAGETTER;;
+        super.COMMAND_NAME = DGConst.DATAGETTER;
     }
 
     /**
@@ -35,14 +34,10 @@ public class DataGetter extends Base {
      */
     public static void main(final String[]args){
         int exitcode = new DataGetter().load(args);
-        //プログラム終了 終了値:exitcode
         System.exit(exitcode);
     }
 
-    /**
-     * beanの実行
-     * @throws Exception 例外
-     */
+    @Override
     protected void execute(final String[]args) throws Exception{
         DataGetterBusiness bean =
                 (DataGetterBusiness) context.getBean(super.COMMAND_NAME);
@@ -50,9 +45,7 @@ public class DataGetter extends Base {
         bean.execute(args);
     }
 
-    /**
-     * 引数チェック
-     */
+    @Override
     protected void checkArgs(final String[]args){
 
         try {

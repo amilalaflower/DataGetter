@@ -50,7 +50,16 @@ abstract class Base {
         return exitcode;
     }
 
+    /**
+     * 引数チェック
+     * @param args 引数
+     */
     protected abstract void checkArgs(final String[]args);
 
+    /**
+     * メイン処理実行
+     * @param args　引数
+     * @throws Exception　例外
+     */
     protected abstract void execute(final String[]args) throws Exception;
 }
